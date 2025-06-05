@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 const Main = () => {
 
   const [politicians, setPoliticians] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetch("https://boolean-spec-frontend.vercel.app/freetestapi/politicians")
@@ -12,11 +13,24 @@ const Main = () => {
       .catch(err => console.error(error))
   }, []);
 
-  console.log(politicians);
+  const filterPoliticians = useMemo(() => {
+    return politicians.filter(p => {
+      const isInName = p.name.toLowerCase().includes(search.toLowerCase());
+      const isInBio = p.biography.toLowerCase().includes(search.toLowerCase());
+      return isInName || isInBio
+    });
+  }, [politicians, search]);
 
   return (
     <div>
       <h1 className='text-danger m-4'>Lista dei politici</h1>
+      <input
+        className='m-4 form-control'
+        type="text"
+        placeholder='Cerca per nome'
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+      />
       <div className='container'>
         {politicians.map((p) => {
           <div className='card' key={p.id}>
