@@ -1,5 +1,18 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+
+const PoliticianCard = React.memo(({ name, biography, position, image }) => {
+  console.log('Card');
+  return (
+    <div className='card'>
+      <img src={image} alt={name} />
+      <h2>{name}</h2>
+      <p><strong>Posizione:</strong>{position}</p>
+      <p>{biography}</p>
+    </div>
+  )
+});
+
 
 const Main = () => {
 
@@ -32,13 +45,8 @@ const Main = () => {
         onChange={e => setSearch(e.target.value)}
       />
       <div className='container'>
-        {politicians.map((p) => {
-          <div className='card' key={p.id}>
-            <img src={p.image} alt={p.name} />
-            <h2>{p.name}</h2>
-            <p><strong>Posizione:</strong>{p.position}</p>
-            <p>{p.biography}</p>
-          </div>
+        {filterPoliticians.map((p) => {
+          <PoliticianCard key={p.id} {...p} />
         })}
       </div>
     </div>
